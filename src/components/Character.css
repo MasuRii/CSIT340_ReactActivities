@@ -1,0 +1,8 @@
+.character {
+    position: absolute;
+    width: 100px;
+
+    image-rendering: auto;
+
+    transition: none;
+}
