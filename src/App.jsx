@@ -60,7 +60,7 @@ const ANIMATION_FRAMES = {
     [ACTIONS.DOCK]: [dock4, dock5]
 };
 
-const Biacolo_App = () => {
+const App = () => {
     const [action,
         setAction] = useState(ACTIONS.IDLE);
     const [frameIndex,
@@ -670,4 +670,4 @@ const Biacolo_App = () => {
     )
 };
 
-export default Biacolo_App;
+export default App;
