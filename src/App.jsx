@@ -635,7 +635,9 @@ const Biacolo_App = () => {
                         <button style={restartButtonStyle} onClick={() => window.location.reload()}>
                             Restart
                         </button>
-                        <p style={createdByStyle}>PATUTI GAME | Created by: Math Lee L. Biacolo</p>
+                        <hr></hr>
+                        <p style={createdByStyle}>PATUTI GAME</p>
+                        <p style={createdByStyle}>Created by: Math Lee L. Biacolo</p>
                     </div>
                 )}
             <div style={healthBarContainerStyle}>
