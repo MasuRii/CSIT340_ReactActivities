@@ -60,7 +60,7 @@ const ANIMATION_FRAMES = {
     [ACTIONS.DOCK]: [dock4, dock5]
 };
 
-const App = () => {
+const Biacolo_App = () => {
     const [action,
         setAction] = useState(ACTIONS.IDLE);
     const [frameIndex,
@@ -473,7 +473,7 @@ const App = () => {
                     newBullet.y += newBullet.speedY || 0;
 
                     const characterWidth = 70;
-                    const characterHeight = 80;
+                    const characterHeight = 100;
 
                     const characterX = (window.innerWidth / 2 + position.x) - characterWidth / 2;
                     const characterY = 50 + 250 + 20 + position.y;
@@ -668,4 +668,4 @@ const App = () => {
     )
 };
 
-export default App;
+export default Biacolo_App;
