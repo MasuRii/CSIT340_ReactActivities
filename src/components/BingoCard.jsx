@@ -1,21 +1,45 @@
 import React, { useEffect, useState } from 'react';
 
-const BingoCard = ({ playcardToken, card }) => {
+const BingoCard = ({ playcardToken, card, calledNumbers }) => {
   const [isWinner, setIsWinner] = useState(false);
-  const [highlighted, setHighlighted] = useState({});
+  const [highlightedManual, setHighlightedManual] = useState({});
+  const [highlightedAuto, setHighlightedAuto] = useState([]);
+
+  useEffect(() => {
+    const autoHighlights = [];
+    Object.keys(card).forEach(column => {
+      card[column].forEach(number => {
+        if (calledNumbers.includes(number)) {
+          autoHighlights.push(`${column}-${number}`);
+        }
+      });
+    });
+    setHighlightedAuto(autoHighlights);
+  }, [calledNumbers, card]);
 
   const checkWin = () => {
     fetch(`http://www.hyeumine.com/checkwin.php?playcard_token=${playcardToken}`)
-      .then(response => response.json())
-      .then(data => setIsWinner(data === 1))
+      .then(response => response.text())
+      .then(data => setIsWinner(parseInt(data) === 1))
       .catch(() => setIsWinner(false));
   };
 
-  const toggleHighlight = (column, number) => {
-    setHighlighted(prev => {
+  const toggleHighlightManual = (column, number) => {
+    setHighlightedManual(prev => {
       const key = `${column}-${number}`;
-      return { ...prev, [key]: !prev[key] };
+      const newHighlights = { ...prev };
+      if (newHighlights[key]) {
+        delete newHighlights[key];
+      } else {
+        newHighlights[key] = true;
+      }
+      return newHighlights;
     });
+  };
+
+  const isHighlighted = (column, number) => {
+    const key = `${column}-${number}`;
+    return highlightedManual[key] || highlightedAuto.includes(key);
   };
 
   return (
@@ -29,8 +53,8 @@ const BingoCard = ({ playcardToken, card }) => {
               return (
                 <div
                   key={index}
-                  className={`card-cell ${highlighted[key] ? 'highlighted' : ''}`}
-                  onClick={() => toggleHighlight(column, number)}
+                  className={`card-cell ${isHighlighted(column, number) ? 'highlighted' : ''}`}
+                  onClick={() => toggleHighlightManual(column, number)}
                 >
                   {number}
                 </div>

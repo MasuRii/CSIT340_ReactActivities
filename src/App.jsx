@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import JoinGame from './components/JoinGame';
 import BingoCardList from './components/BingoCardList';
 
 const App = () => {
   const [gameCode, setGameCode] = useState('');
   const [cards, setCards] = useState([]);
+  const [calledNumbers, setCalledNumbers] = useState([]);
 
   const handleJoin = (code) => {
     setGameCode(code);
+    fetchCard(code);
+  };
+
+  const fetchCard = (code) => {
     fetch(`http://www.hyeumine.com/getcard.php?bcode=${code}`)
       .then(response => response.json())
       .then(data => {
@@ -18,11 +23,41 @@ const App = () => {
       .catch(() => {});
   };
 
+  const handleAddCard = () => {
+    fetchCard(gameCode);
+  };
+
+  const fetchCalledNumbers = () => {
+    fetch(`http://www.hyeumine.com/bingodashboard.php?bcode=${gameCode}&dr=1`)
+      .then(response => response.text())
+      .then(htmlString => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlString, 'text/html');
+        const buttons = Array.from(doc.querySelectorAll('button.btn-success'));
+        const numbers = buttons.map(btn => parseInt(btn.textContent));
+        setCalledNumbers(numbers);
+      })
+      .catch(() => {});
+  };
+
+  useEffect(() => {
+    if (gameCode) {
+      fetchCalledNumbers();
+      const interval = setInterval(fetchCalledNumbers, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [gameCode]);
+
   return (
     <div className="app">
       <h1>E-Bingo</h1>
       {!gameCode && <JoinGame onJoin={handleJoin} />}
-      {gameCode && <BingoCardList cards={cards} />}
+      {gameCode && (
+        <>
+          <button onClick={handleAddCard}>Add More Cards</button>
+          <BingoCardList cards={cards} calledNumbers={calledNumbers} />
+        </>
+      )}
     </div>
   );
 };
