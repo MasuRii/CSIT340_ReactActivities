@@ -13,7 +13,7 @@ const App = () => {
   };
 
   const fetchCard = (code) => {
-    fetch(`http://www.hyeumine.com/getcard.php?bcode=${code}`)
+    fetch(`/api/getcard.php?bcode=${code}`)
       .then(response => response.json())
       .then(data => {
         if (data !== 0) {
@@ -28,7 +28,7 @@ const App = () => {
   };
 
   const fetchCalledNumbers = () => {
-    fetch(`http://www.hyeumine.com/bingodashboard.php?bcode=${gameCode}&dr=1`)
+    fetch(`/api/bingodashboard.php?bcode=${gameCode}`)
       .then(response => response.text())
       .then(htmlString => {
         const parser = new DOMParser();

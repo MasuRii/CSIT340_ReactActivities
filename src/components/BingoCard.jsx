@@ -18,7 +18,7 @@ const BingoCard = ({ playcardToken, card, calledNumbers }) => {
   }, [calledNumbers, card]);
 
   const checkWin = () => {
-    fetch(`http://www.hyeumine.com/checkwin.php?playcard_token=${playcardToken}`)
+    fetch(`/api/checkwin.php?playcard_token=${playcardToken}`)
       .then(response => response.text())
       .then(data => setIsWinner(parseInt(data) === 1))
       .catch(() => setIsWinner(false));
